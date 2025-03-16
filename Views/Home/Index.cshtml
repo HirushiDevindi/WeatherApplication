@@ -1,0 +1,112 @@
+﻿@model WeatherModel
+@{
+    ViewData["Title"] = "Current weather data";
+}
+<h1>@ViewData["Title"]</h1>
+
+<p>Check Current Weather data here</a></p>
+
+<head>
+    <link rel="stylesheet" type="text/css" href="~/css/index.css" />
+</head>
+
+<div class="inner-body">
+    <div class="container-inner">
+        @* <h1 class="display-4">Welcome</h1>
+        <p>Learn about <a href="https://learn.microsoft.com/aspnet/core" style="color: #4db8ff;">building Web apps with ASP.NET Core</a>.</p> *@
+
+        <form asp-controller="Home" asp-action="GetCity" method="post">
+            <div>
+                <input type="text" class="city" name="city" placeholder="Enter city name" required style="padding: 5px; margin-bottom: 10px; width: 80%;" />
+                <input type="submit" value="Submit" style="padding: 5px 10px; cursor: pointer;" />
+                <br/>
+            </div>
+        </form>
+
+        @if (ViewBag.ErrorMessage != null)
+        {
+            <h5 style="color: red;"> @ViewBag.ErrorMessage</h5>
+        }
+        else if (Model != null)
+        {
+            <h5>Weather Data for: <strong>@Model.name, @Model.sys.country</strong></h5>
+            <br/>
+            <h5 id="date-time"></h5> <!-- Placeholder for date and time -->
+            @* <h5>@Model.timezone</h5> *@
+
+            <div class="weather-data">
+                <div class="weather-column">
+                    <h5>Temperature: @Model.main.temp K</h5>
+                    <h5>Humidity: @Model.main.humidity %</h5>
+                    <h5>Wind Speed: @Model.wind.speed m/s</h5>
+                    
+                </div>
+                <div class="weather-column">
+                    <h5>Weather Status: @Model.weather[0].main</h5>
+                    <img src="@GetWeatherIcon(@Model.weather[0].main)" alt="Weather Icon" class="weather-icon" />
+                    
+                </div>
+            </div>
+
+            <script>
+                // Example data from OpenWeather API
+                const dt = @Model.dt; // Time of data calculation in UTC
+                const timezoneOffset = @Model.timezone; // Shift in seconds from UTC (e.g., 2 hours ahead)
+
+                // Convert `dt` (Unix timestamp) to a Date object (in UTC)
+                const utcDate = new Date(dt * 1000);
+                const localDate = utcDate;
+
+                // Adjust the UTC date for the timezone offset
+                //const localDate = new Date(utcDate.getTime() + timezoneOffset * 1000);
+
+                // Format the local date and time
+                const formattedDate = localDate.toLocaleString('en-US', {
+                    weekday: 'long',
+                    year: 'numeric',
+                    month: 'long',
+                    day: 'numeric',
+                    hour: 'numeric',
+                    minute: 'numeric',
+                    second: 'numeric',
+                    hour12: true
+                });
+
+                // Display the calculated local date and time
+                document.getElementById("date-time").textContent = `${formattedDate}`;
+            </script>
+        }
+        else
+        {
+            <h5 style="text-align: center;">Welcomen to Weather App!</h5>
+            <h5 style="text-align: center;"> Enter a city to start.</h5>
+        }
+    </div>
+
+    @functions {
+        public string GetWeatherIcon(string weatherStatus)
+        {
+            // Based on the weather status, return the appropriate icon
+            switch (weatherStatus.ToLower())
+            {
+                case "rain":
+                    return "/images/rain.png";
+                case "clouds":
+                    return "/images/clouds.png";
+                case "drizzle":
+                    return "/images/drizzle.jpeg";
+                case "thunderstorm":
+                    return "/images/storm.png";
+                case "snow":
+                    return "/images/snow.jpg";
+                case "mist":
+                case "fog":
+                    return "/images/fog.jpg";
+                case "clear":
+                    return "/images/clear.png";
+                default:
+                    return "/images/clear.png"; // Default image for unrecognized statuses
+            }
+        }
+    }
+</div>

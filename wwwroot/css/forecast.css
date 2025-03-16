@@ -1,0 +1,55 @@
+.weather-data {
+  display: flex; /* Enables horizontal layout */
+  flex-direction: row; /* Align items in a row */
+  gap: 10px; /* Adds space between items */
+  overflow-x: auto; /* Adds horizontal scrolling if content overflows */
+  max-width: 100%; /* Ensures it doesn't exceed the parent container width */
+  padding: 10px;
+  box-sizing: border-box; /* Includes padding in width calculation */
+}
+
+.container-inner {
+  background: rgba(0, 0, 0, 0.6);
+  padding: 20px;
+  border-radius: 10px;
+  text-align: center;
+  width: 70%; /* Sets the container width */
+  max-width: 100%; /* Ensures it doesn't exceed the viewport width */
+  overflow: hidden; /* Hides overflow content visually except scrollable areas */
+}
+
+.weather-row {
+  flex: 0 0 auto; /* Prevent rows from shrinking or growing */
+  border: 1px solid #ccc;
+  padding: 10px;
+  border-radius: 5px;
+  background-color: grey;
+  text-align: center;
+  width: 200px; /* Fixed width for each row item */
+}
+
+.weather-column {
+  text-align: center;
+}
+
+.weather-icon {
+  width: 50px;
+  height: 50px;
+  margin-top: 10px;
+}
+
+.inner-body {
+  font-family: Arial, sans-serif;
+  color: #fff;
+  text-shadow: 1px 1px 5px rgba(0, 0, 0, 0.7);
+  margin: 0;
+  padding: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 80vh;
+}
+
+h5 {
+  margin: 10px 0;
+}

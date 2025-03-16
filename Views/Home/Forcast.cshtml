@@ -1,0 +1,89 @@
+
+@model ForecastModel
+@{
+    ViewData["Title"] = "Forcast Weather Data upto 5 days";
+}
+<h1>@ViewData["Title"]</h1>
+
+<p>Check forcast weather data.</p>
+
+
+<head>
+    <link rel="stylesheet" type="text/css" href="~/css/forecast.css" />
+</head>
+
+<div class="inner-body">
+    <div class="container-inner">
+
+        <form asp-controller="Home" asp-action="GetCityForecast" method="post">
+            <div>
+                <input type="text" class="city" name="city" placeholder="Enter city name" required style="padding: 5px; margin-bottom: 10px; width: 80%;" />
+                <input type="submit" value="Submit" style="padding: 5px 10px; cursor: pointer;" />
+                <br/>
+            </div>
+        </form>
+
+        @if (ViewBag.ErrorMessage != null)
+        {
+            <h5 style="color: red;"> @ViewBag.ErrorMessage</h5>
+        }
+        else if (Model != null)
+        {
+            <h5>Weather Data for: <strong>@Model.city.name, @Model.city.country</strong></h5>
+            
+                
+                <div class="weather-data">
+                    @foreach (var item in Model.list)
+                    {
+                        <div class="weather-row">
+                            <div class="weather-column">
+                                <h6>@item.dt_txt</h6>
+                                <br/>
+                                <h5>Temperature: @item.main.temp K</h5>
+                                <h5>Humidity: @item.main.humidity %</h5>
+                                <h5>Wind Speed: @item.wind.speed m/s</h5>
+                                <br/>
+                                <br/>
+                                <img src="@GetWeatherIcon(@item.weather[0].main)" alt="Weather Icon" class="weather-icon" />
+                                <h5>Weather Status: @item.weather[0].main</h5>
+                            </div>
+                        </div>
+                    }
+                </div>
+            
+            }
+        else{
+            <h5 style="text-align: center;">Welcomen to Weather App!</h5>
+            <h5 style="text-align: center;"> Enter a city to start.</h5>
+        }
+
+
+
+        @functions {
+        public string GetWeatherIcon(string weatherStatus)
+        {
+            // Based on the weather status, return the appropriate icon
+            switch (weatherStatus.ToLower())
+            {
+                case "rain":
+                    return "/images/rain.png";
+                case "clouds":
+                    return "/images/clouds.png";
+                case "drizzle":
+                    return "/images/drizzle.jpeg";
+                case "thunderstorm":
+                    return "/images/storm.png";
+                case "snow":
+                    return "/images/snow.jpg";
+                case "mist":
+                case "fog":
+                    return "/images/fog.jpg";
+                case "clear":
+                    return "/images/clear.png";
+                default:
+                    return "/images/clear.png"; // Default image for unrecognized statuses
+            }
+        }
+    }
+
+    </div>
